@@ -36,6 +36,24 @@ from a modern filesystem.
 * [[User manual|bcachefs-principles-of-operation.pdf]]
 * [[FAQ]]
 
+## Distribution packages, installation instructions, DKMS:
+
+As of 6.18, bcachefs is no longer being distributed with the kernel, for
+reasons too complicated to go into here.
+
+(But it might have something to do with QA).
+
+So we're shipping as a DKMS module now. (Like ZFS!).
+
+Nixos, Arch: your distribution bcachefs-tools package has everything you need.
+You're good to go!
+
+Debian, Ubuntu: https://apt.bcachefs.org/
+
+Fedora: https://copr.fedorainfracloud.org/coprs/ngompa/bcachefs/builds/
+
+OpenSUSE: https://build.opensuse.org/repositories/filesystems:bcachefs:release
+
 ## Repositories
 
 [[https://evilpiepirate.org/git/bcachefs.git]]  
