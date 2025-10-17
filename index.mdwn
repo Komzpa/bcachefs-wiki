@@ -53,7 +53,7 @@ Debian, Ubuntu: [[https://apt.bcachefs.org/]]
 
 Fedora: [[https://copr.fedorainfracloud.org/coprs/ngompa/bcachefs/builds/]]
 
-OpenSUSE: [[https://build.opensuse.org/package/show/filesystems:bcachefs:snapshot/bcachefs]]
+OpenSUSE: [[https://build.opensuse.org/package/show/filesystems:bcachefs:release/bcachefs]]
 
 ## Repositories
 
