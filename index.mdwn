@@ -48,11 +48,11 @@ So we're shipping as a DKMS module now. (Like ZFS!).
 Nixos, Arch: your distribution bcachefs-tools package has everything you need.
 You're good to go!
 
-Debian, Ubuntu: https://apt.bcachefs.org/
+Debian, Ubuntu: [[https://apt.bcachefs.org/]]
 
-Fedora: https://copr.fedorainfracloud.org/coprs/ngompa/bcachefs/builds/
+Fedora: [[https://copr.fedorainfracloud.org/coprs/ngompa/bcachefs/builds/]]
 
-OpenSUSE: https://build.opensuse.org/repositories/filesystems:bcachefs:release
+OpenSUSE: [[https://build.opensuse.org/package/show/filesystems:bcachefs:snapshot/bcachefs]]
 
 ## Repositories
 
