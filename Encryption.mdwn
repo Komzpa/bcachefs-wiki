@@ -29,10 +29,10 @@ encryption on an existing filesystem - kernel code exists).
 
 Example:
 
-    $ bcache format --encrypted /dev/sda
+    $ bcachefs format --encrypted /dev/sda
 (Enter passphrase when prompted)
 
-    $ bcache unlock /dev/sda
+    $ bcachefs unlock /dev/sda
 (Enter passphrase again)
 
 Then mount as normal:
