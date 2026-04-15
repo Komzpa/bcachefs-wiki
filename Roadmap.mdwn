@@ -2,12 +2,12 @@
 
 [[!toc levels=3 startlevel=2  ]]
 
-## More ways of setting IO path options
+### More ways of setting IO path options
 
 We need an option for setting IO path options on a per file descriptor or per
 process basis.
 
-## tmpdir support
+### tmpdir support
 
 Add a directory option for using it as a tmpdir - the contents will be deleted
 on every mount.
@@ -17,7 +17,7 @@ for fsync() to do anything - this option will also turn fsync() into a noop,
 and without the fsync buffered IO will only be flushed on memory reclaim -
 meaning, tmpdir directories should perform just as well as a tmpfs.
 
-## Compression
+### Compression
 
 We'd like to add multithreaded compression, for when a single thread is doing
 writes at a high enough rate to be CPU bound.
@@ -25,50 +25,6 @@ writes at a high enough rate to be CPU bound.
 We'd also like to add support for xz compression: this will be useful when
 doing a "squashfs-like" mode. The blocker is that kernel only has support for
 xz decompression, not compression - hopefully we can get this added.
-
-## Scrub
-
-We're still missing scrub support. Scrub's job will be to walk all data in the
-filesystem and verify checksums, recovery bad data from a good copy if it
-exists or notifying the user if data is unrecoverable.
-
-Since we now have backpointers, we have the option of doing scrub in keyspace
-order, or lba order - lba order will be much better for rotational devices.
-
-## Configurationless tiered storage
-
-We're starting to work on benchmarking individual devices at format time, and
-storing their performance characteristics in the superblock.
-
-This will allow for a number of useful things - including better tracking of
-drive health over time - but the real prize will be tiering that doesn't
-require explicit configuration: foreground writes will preferentially go to
-the fastest device(s), and in the background data will be moved from fast
-devices to slow devices, taking into account how hot or cold that data is.
-
-Even better, this will finally give us a way to manage more than two tiers, or
-performance classes, of devices.
-
-## Disk space accounting:
-
-Currently, disk space accounting is primarily persisted in the journal (on
-clean shutdown, it's also stored in the superblock), and each disk space
-counter is added to every journal entry.
-
-So currently there's a real limit on how many counters we can maintain, and
-we'll need to do something else before adding e.g. per snapshot disk space
-accounting.
-
-We'll need to make disk space accounting keys in a btree, like all other
-metadata. Since disk space accounting was implemented we've gained the btree
-write buffer code, so this is now possible: on transaction commit, we will do
-write buffer updates with deltas for the counters being modified, and then the
-btree write buffer flush code will handle summing up the deltas and flushing
-the updates to the underlying btree.
-
-We also want to add more counters to the inode. Right now in the inode we only
-track sectors used as fallocate would see them - we should add counters that
-take into account replication and compression.
 
 ### Device management:
 
@@ -165,22 +121,6 @@ bcachefs allocation is bucket based: we allocate an entire bucket, write to it
 once, and then never rewrite it until the entire bucket is empty and ready to
 be reused. This maps nicely to both ZNS and SMR zones, which makes supporting
 both of these directly particularly attractive.
-
-## Squashfs mode
-
-Righ now we have dedicated filesystems, like
-[[squashfs|https://en.wikipedia.org/wiki/SquashFS]], for building and reading
-from a highly compressed but read-only filesystem.
-
-bcachefs metadata is highly space efficient(e.g. [[packed
-bkeys|https://bcachefs.org/Architecture/#Bkey_packing]], and could probably
-serve as a direct replacement with a relatively small amount of work to
-generate a filesystem image in the most compact way. The same filesystem image
-could later be mounted read-write, if given more space.
-
-Specifying a directory tree to include when creating a new filesystem is
-already a requested feature - other filesystems have this as the `-c` option
-to mkfs.
 
 ## Container filesystem mode
 

@@ -4,7 +4,6 @@
 * [[User manual|bcachefs-principles-of-operation.pdf]]
 
 ### Developer documentation
-* [[Architecture]]
 * [[BtreeIterators]]
 * [[BtreeNodes]]
 * [[BtreeWhiteouts]]

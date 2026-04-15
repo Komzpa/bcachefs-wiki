@@ -10,12 +10,12 @@ from a modern filesystem.
   never return incorrect data.
 * Multiple devices
 * Replication
-* [[Erasure coding|ErasureCoding]] (incomplete)
-  High performance: doesn't fragment your writes (like ZFS), no RAID hole
+* [[Erasure coding|ErasureCoding]] - high performance, no write hole
 * [[Caching, data placement|Caching]]
 * [[Compression]]
 * [[Encryption]]
 * [[Snapshots]]
+* Scrub
 * Nocow mode
 * Reflink
 * Extended attributes, ACLs, quotas
@@ -25,15 +25,13 @@ from a modern filesystem.
   it's not a matter of if, but when. It doesn't matter what happened to the
   filesystem: bad hardware, lightning strikes, an errant dd, you can expect
   that bcachefs will repair the damage and keep going, usually with no user
-  intervention required.
-
-  It's the job of the filesystem to never lose your data: anything that can be
-  repaired, will be.
+  intervention required. It's the job of the filesystem to never lose your
+  data: anything that can be repaired, will be.
 
 ## Documentation
 
+* [[User manual|bcachefs-principles-of-operation.pdf]] - full reference manual
 * [[Getting Started|GettingStarted]]
-* [[User manual|bcachefs-principles-of-operation.pdf]]
 * [[FAQ]]
 
 ## Distribution packages, installation instructions, DKMS:

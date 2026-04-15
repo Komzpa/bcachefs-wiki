@@ -1,18 +1,36 @@
-Bcachefs is not yet upstream - you'll have to
-[[build a kernel|https://kernelnewbies.org/KernelBuild]] to use it. 
+# Getting Started
 
-First, check out the bcachefs kernel and tools repositories:
+## Installation
 
-    git clone https://evilpiepirate.org/git/bcachefs.git
-    git clone https://evilpiepirate.org/git/bcachefs-tools.git
+bcachefs is distributed as a DKMS module (like ZFS). Your distribution's
+bcachefs-tools package includes everything you need: the kernel module and
+userspace tools.
 
-Build and install as usual - make sure you enable `CONFIG_BCACHEFS_FS`. Then, to
-format and mount a single device with the default options, run:
+**Arch, NixOS:** Install bcachefs-tools from your package manager - you're done.
+
+**Debian, Ubuntu:**
+
+    curl -fsSL https://apt.bcachefs.org/signing-key.asc | sudo tee /etc/apt/keyrings/bcachefs.asc
+    echo "deb [signed-by=/etc/apt/keyrings/bcachefs.asc] https://apt.bcachefs.org $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/bcachefs.list
+    sudo apt update && sudo apt install bcachefs-tools bcachefs-dkms
+
+**Fedora:**
+
+    sudo dnf copr enable ngompa/bcachefs
+    sudo dnf install bcachefs-tools
+
+**OpenSUSE:** See [[https://build.opensuse.org/package/show/filesystems:bcachefs:release/bcachefs]]
+
+## Basic usage
+
+Format and mount a single device:
 
     bcachefs format /dev/sda1
     mount -t bcachefs /dev/sda1 /mnt
 
-For a multi device filesystem, with sda1 caching sdb1:
+## Multi-device filesystem
+
+For a tiered setup with sda1 (fast SSD) caching sdb1 (slow HDD):
 
     bcachefs format /dev/sd[ab]1 \
         --foreground_target /dev/sda1 \
@@ -20,8 +38,11 @@ For a multi device filesystem, with sda1 caching sdb1:
         --background_target /dev/sdb1
     mount -t bcachefs /dev/sda1:/dev/sdb1 /mnt
 
-This will configure the filesystem so that writes will be buffered to /dev/sda1
-before being written back to /dev/sdb1 in the background, and that hot data
-will be promoted to /dev/sda1 for faster access.
+Writes buffer to the fast device and migrate to the slow device in the
+background. Hot data gets promoted back to the fast device automatically.
 
-See `bcachefs format --help` for more options.
+## Next steps
+
+See `bcachefs format --help` for all options, or read the full
+[[User manual|bcachefs-principles-of-operation.pdf]] for detailed documentation
+on all features.

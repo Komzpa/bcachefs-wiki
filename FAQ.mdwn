@@ -13,9 +13,9 @@ include a focus on reliability, robustness, and performance. Bcachefs is safer t
 btrfs and is also shown to outperform zfs in terms of speed and reliability. 
 
 3.  Is bcachefs stable for production use?
-Bcachefs can currently be considered beta quality. It has a small pool of
-outside users and has been stable for quite some time now; there's no reason
-to expect issues as long as you stick to the currently supported feature set.
+Yes. bcachefs has a growing user base and has been stable for quite some time.
+It includes extensive self-healing and repair capabilities - if something does
+go wrong, bcachefs is designed to detect and fix it automatically where possible.
 
 4.  How do I install and use bcachefs on my Linux system?
 Instructions for installation can be found here:
@@ -33,13 +33,14 @@ Information on current bugs within bcachefs and related tooling can be found her
 [[bcachefs bugs|https://github.com/koverstreet/bcachefs/issues]]
 [[bcachefs-tools bugs|https://github.com/koverstreet/bcachefs-tools/issues]]
 
-Our Todo list can be found here:
-[[Todo]]    
+Our roadmap/todo list can be found here:
+[[Roadmap]]    
 
 7.  What is the development status of bcachefs?
-Currently we are working on getting bcachefs merged into the linux kernel. 
-A roadmap and features list can be found here:
-[[Roadmap]]
+bcachefs is mature and actively developed. It ships as a DKMS module
+(like ZFS) with packages available for most distributions. See [[Getting
+Started|GettingStarted]] for installation instructions, and [[Roadmap]] for
+planned features.
 
 8. Can I migrate my existing filesystem to bcachefs?
 Yes, users can migrate their existing filesystems into a bcachefs filesystem
@@ -58,27 +59,16 @@ To use the caching device (cdev) with the new bcachefs, you will need to
 reformat it. In principle this should not be a problem, as they can be removed
 from a backing device (bdev/bcache).
 
-If you wish to reuse the backing device (bdev/bcache), you can't this is
-nolonger an option.
+If you wish to reuse the backing device (bdev/bcache), you can't - this is
+no longer an option.
 
 If you wish to use bcachefs as a filesystem you will have to format the
 backing device (bdev/bcache) with the new filesystem.
 
-13. Do I have to reformat my bcache drive to use the new bcachefs ?
-To use the caching device (cdev) with the new bcachefs, you will need to
-reformat it. In principle this should not be a problem, as they can be removed
-from a backing device (bdev/bcache).
-
-If you wish to reuse the backing device (bdev/bcache), you can't this is
-nolonger an option.
-
-If you wish to use bcachefs as a filesystem you will have to format the
-backing device (bdev/bcache) with the new filesystem.
-
-14. Does bcachefs still have the bcache caching functionality of block devices ?
+12. Does bcachefs still have the bcache caching functionality of block devices ?
 No.
 
-15. Where do I obtain statically linked bcachefs-tool (for use in initramfs) ?
+13. Where do I obtain statically linked bcachefs-tool (for use in initramfs) ?
 You can either compile them yourself from source, or refer to your
 distribution on how to obtain a statically linked set.
 
@@ -86,16 +76,11 @@ Statically linked programs have all the required dependencies compiled in. As
 such, they require no external libraries at runtime. This does however
 increase the size of the binary.
 
-16. What is liburcu ?
+14. What is liburcu ?
 userspace RCU (read-copy-update) library
 [[http://lttng.org/urcu]]
 
-17. I get the error "tools-util.c:16:19: fatal error: blkid.h: No such file or directory":
-You might need to add
-	EXTRA_CFLAGS="-l/usr/include/blkid/"
-or where-ever your OS stores the blkid.h file.
-
-18. I get the error "mount(2) system call failed: Required key not available."
+15. I get the error "mount(2) system call failed: Required key not available."
 You need to unlock the filesystem before mounting. As a superuser, run
 (substituting your drive for `/dev/sdc1`):
     bcachefs unlock /dev/sdc1
