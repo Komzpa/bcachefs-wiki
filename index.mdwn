@@ -30,7 +30,7 @@ from a modern filesystem.
 
 ## Documentation
 
-* [[User manual|bcachefs-principles-of-operation.pdf]] - full reference manual
+* [[User manual|https://bcachefs.org/bcachefs-principles-of-operation.pdf]] - full reference manual
 * [[Getting Started|GettingStarted]]
 * [[FAQ]]
 
