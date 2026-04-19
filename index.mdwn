@@ -33,6 +33,7 @@ from a modern filesystem.
 * [[User manual|https://bcachefs.org/bcachefs-principles-of-operation.pdf]] - full reference manual
 * [[Getting Started|GettingStarted]]
 * [[FAQ]]
+* [[Changelog|https://evilpiepirate.org/git/bcachefs-tools.git/tree/Changelog.mdwn]]
 
 ## Distribution packages, installation instructions, DKMS:
 
