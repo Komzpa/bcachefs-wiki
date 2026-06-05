@@ -71,9 +71,24 @@ of the system while running.
 ## Development tools
 
 bcachefs development is done with
-[[ktest|https://evilpiepirate.org/git/ktest.git]], which is used for both
-interactive and automated testing (including code coverage analysis), with a
-large test suite: [[dashboard|https://evilpiepirate.org/~testdashboard/ci]].
+[[ktest|https://evilpiepirate.org/git/ktest.git]], a kernel testing harness
+that builds a kernel, launches a QEMU VM with scratch block devices and
+networking, and runs declared tests inside it. Tests are bash scripts that
+declare their kernel-config dependencies, scratch-device counts, and
+timeouts; the same machinery is used for interactive single-test runs
+during development and for the automated CI farm. Code coverage analysis
+is supported.
+
+The CI continuously builds and tests every commit on every tracked branch
+across a fleet of worker hosts, with results published to a public
+[[dashboard|https://evilpiepirate.org/~testdashboard/ci]] and queryable
+from the command line via a `ci-status` CLI. New worker hosts are NixOS
+installs configured from a shared common.nix; a `ci-daemon` running on
+the dashboard host generates one job per subtest and feeds them to
+worker slots in newest-commits-first order. See [[CIInfrastructure]] for
+the full architecture (components, configuration, workflow, adding tests
+or worker hosts) and [[TestServerSetup]] for the per-host install
+procedure.
 
 ## About
 
