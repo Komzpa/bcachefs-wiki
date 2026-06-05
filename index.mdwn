@@ -85,10 +85,19 @@ across a fleet of worker hosts, with results published to a public
 from the command line via a `ci-status` CLI. New worker hosts are NixOS
 installs configured from a shared common.nix; a `ci-daemon` running on
 the dashboard host generates one job per subtest and feeds them to
-worker slots in newest-commits-first order. See [[CIInfrastructure]] for
-the full architecture (components, configuration, workflow, adding tests
-or worker hosts) and [[TestServerSetup]] for the per-host install
-procedure.
+worker slots in newest-commits-first order.
+
+The dashboard root currently lists branches but no longer links into the
+per-user views. To watch what upstream is working on:
+
+* [Kent's `bcachefs-testing`](https://evilpiepirate.org/~testdashboard/ci?user=kmo&branch=bcachefs-testing) — the integration branch where new work lands first
+
+The URL pattern is `?user=<user>&branch=<branch>` if you want to filter
+other branches the same way.
+
+See [[CIInfrastructure]] for the full architecture (components,
+configuration, workflow, adding tests or worker hosts) and
+[[TestServerSetup]] for the per-host install procedure.
 
 ## About
 

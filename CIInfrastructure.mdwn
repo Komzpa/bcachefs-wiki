@@ -7,6 +7,12 @@ pass/fail per subtest on a public dashboard.
 ## Dashboard
 
 * Public dashboard: <https://evilpiepirate.org/~testdashboard/>
+* Branch summary (commit list with pass/fail counts):
+  `https://evilpiepirate.org/~testdashboard/ci?user=<user>&branch=<branch>`
+    * Kent's `bcachefs-testing`:
+      <https://evilpiepirate.org/~testdashboard/ci?user=kmo&branch=bcachefs-testing>
+    * The dashboard root currently lists configured branches but no
+      longer surfaces the per-user views — bookmark the URL above.
 * Per-commit detail: `https://evilpiepirate.org/~testdashboard/c/<sha>/`
 * Per-test log fetcher: `https://evilpiepirate.org/~testdashboard/c/<sha>/<test_group>.<test_name>/log.br`
   (brotli-compressed; pipe through `brotli -d`)
