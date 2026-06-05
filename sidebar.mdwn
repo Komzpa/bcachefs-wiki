@@ -5,13 +5,13 @@
 
 ### Developer documentation
 * [[BtreeIterators]]
-* [[BtreeNodes]]
 * [[BtreeWhiteouts]]
 * [[Encryption]]
 * [[Transactions]]
 * [[Snapshots]]
 * [[Allocator]]
 * [[Fsck]]
+* [[CIInfrastructure]]
 * [[TestServerSetup]]
 * [[StablePages]]
 * [[October 2022 talk for Redhat|bcachefs_talk_2022_10.mpv]]

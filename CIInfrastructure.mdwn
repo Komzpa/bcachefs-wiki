@@ -1,0 +1,116 @@
+# CI Infrastructure
+
+The bcachefs CI continuously builds + tests every commit on every
+tracked branch across a small fleet of test machines, surfacing
+pass/fail per subtest on a public dashboard.
+
+## Dashboard
+
+* Public dashboard: <https://evilpiepirate.org/~testdashboard/>
+* Per-commit detail: `https://evilpiepirate.org/~testdashboard/c/<sha>/`
+* Per-test log fetcher: `https://evilpiepirate.org/~testdashboard/c/<sha>/<test_group>.<test_name>/log.br`
+  (brotli-compressed; pipe through `brotli -d`)
+
+## Components
+
+### `ktest` — test runner framework
+* Repo: <https://evilpiepirate.org/git/ktest.git> (or via the bcachefs
+  GitHub mirror)
+* What it does: builds a kernel, launches a QEMU VM with networking
+  and scratch block devices, runs declared tests inside it, captures
+  output. Tests are bash scripts declaring kernel-config dependencies,
+  scratch-device counts, timeouts, etc.
+* Test definitions live in `tests/fs/bcachefs/*.ktest` in the ktest
+  repo.
+
+### `ci-daemon` — job scheduler
+* Runs on `testdashboard@evilpiepirate.org`.
+* Push-mode: builds a [jobkit](https://github.com/koverstreet/jobkit)
+  Choir with one executor per worker-host slot, keeps a bounded
+  window (~2000) of jobs submitted at a time, refills as the window
+  drains.
+* One job == one subtest. An executor claims a duration-bounded batch
+  of subtests from a single `.ktest` file and runs them in one VM
+  (checkout → build supervisor → run → pull results).
+* Writes a status snapshot consumed by the CGI / dashboard.
+
+### Worker farm
+* `farm1`, `farm2`: NixOS-managed AArch64 hosts (Adia Alaska
+  colo).
+* `b200`: x86_64 host for tests not covered by farm1/farm2.
+* Per-host install procedure: [[TestServerSetup]].
+* Each host runs one or more ktest executor slots. Slot count is
+  driven by `ci-daemon`'s host config.
+
+### Result storage
+* Output written to the dashboard host's `output_dir` (typically
+  `~/ci-data` on the testdashboard account).
+* Per-commit results serialized into capnp blobs so the dashboard
+  CGI and `ci-status` CLI can load them without scanning per-subtest
+  status files.
+
+## Configuration
+
+System config lives in `/etc/ktest-ci.toml` on the dashboard host.
+Key sections:
+
+* `linux_repo` — path to the kernel source tree the daemon fetches
+  into and builds from.
+* `output_dir` — where results are written.
+* `ktest_dir` — path to the ktest checkout.
+* `ci_url` / `ci_host` — public URL and host that the dashboard
+  publishes results under.
+* `[test_group.*]` — which `.ktest` files belong to a named group,
+  per-group priority and `max_commits`.
+* `[branch.*]` — tracked branches, the remote to fetch from, and
+  which `test_group`s to run on commits to that branch.
+
+## `ci-status` CLI
+
+Local CLI for querying CI results.
+
+* Source: `src/bin/ci-status.rs` in the ktest repo.
+* Install: `cargo install --path .` from the ktest repo root puts
+  `ci-status` into `~/.cargo/bin`.
+* Modes:
+  * Local (`--local`): reads from `output_dir` directly. Default
+    when `~/.ktest/ktest-ci.json5` or `/etc/ktest-ci.toml` is
+    present.
+  * Remote (`--remote <url>`): fetches capnp result blobs over
+    HTTPS from the dashboard.
+* Common subcommands:
+  * `ci-status branches` — list configured branches.
+  * `ci-status log <branch>` — recent commits with pass/fail counts.
+  * `ci-status show <sha>` — per-test status + duration for a
+    commit.
+  * `ci-status logs <sha> <test>` — fetch and display the log for a
+    specific test on a commit.
+  * `ci-status workers` — running worker / slot status (requires
+    local access to the daemon's state).
+
+## Workflow
+
+1. Developer pushes to a tracked branch (e.g. `bcachefs-testing`,
+   `bcachefs-master`).
+2. `ci-daemon` notices the new commit, generates jobs for it, and
+   inserts them into the front of the work window (newest commits
+   first).
+3. Worker slots pull jobs as they become free, run the kernel build
+   + VM test cycle, write results back to the dashboard host.
+4. Dashboard CGI reads the capnp result blobs, renders per-commit
+   summaries and per-test log links.
+5. Developers query results via the web dashboard or `ci-status`.
+
+## Adding a new test
+
+1. Add or modify a `.ktest` file under `tests/fs/bcachefs/` in the
+   ktest repo.
+2. Add the file to the appropriate `[test_group.bcachefs]` `tests`
+   list in `/etc/ktest-ci.toml` on the dashboard host.
+3. The daemon picks up the change at the next branch fetch cycle.
+
+## Adding a new worker host
+
+See [[TestServerSetup]] for the NixOS preinstall procedure.
+After install, register the host's slot count in `ci-daemon`'s
+host config.

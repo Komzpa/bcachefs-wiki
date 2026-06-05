@@ -1,3 +1,35 @@
-#IRC
-\#bcache on oftc.net
+# IRC
+
+`#bcache` on `irc.oftc.net`.
+
 <iframe src="https://webchat.oftc.net/?randomnick=1&channels=bcache&prompt=1" width="647" height="400"></iframe>
+
+## Joining from Matrix
+
+`#bcache` is bridged into Matrix via the official
+[matrix-appservice-irc](https://github.com/matrix-org/matrix-appservice-irc)
+bridge run by the Matrix.org Foundation. Any Matrix client works — no
+separate IRC client needed.
+
+**Join:** `#_oftc_#bcache:matrix.org`
+
+Matrix users appear in the IRC channel with a `[m]` suffix on their
+nick. Multi-homeserver: your homeserver MXID prefix shows up in the
+IRC user's realname (e.g. `org.matrix:nickname`, `de.tnxip:nickname`).
+
+**Bridge bot:** `@oftc-irc:matrix.org`
+
+### Reporting bridge problems
+
+Bridge issues (dropped messages, missing relays, lost connections,
+reconnect failures) aren't a bcachefs problem; the bcachefs maintainers
+can't fix them. Report to the bridge operators:
+
+* Support room: [`#irc:matrix.org`](https://matrix.to/#/#irc:matrix.org)
+* Bug tracker: <https://github.com/matrix-org/matrix-appservice-irc>
+
+### Known limitations
+
+OFTC doesn't support SASL, so when the bridge reconnects you may need
+to manually `REGAIN` your nickname from NickServ. Tracked upstream as
+[matrix-appservice-irc#1483](https://github.com/matrix-org/matrix-appservice-irc/issues/1483).
