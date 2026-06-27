@@ -33,6 +33,10 @@ The user manual can be found here:
 Bcachefs currently does not support data deduplication however compression
 is supported, more information can be found here: [[Compression]]
 
+## How many devices can a bcachefs filesystem use?
+
+Bcachefs supports up to 255 devices in a filesystem.
+
 ## Are there any limitations or known issues with bcachefs?
 
 Information on current bugs within bcachefs and related tooling can be found here:

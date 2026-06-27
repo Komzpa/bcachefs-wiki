@@ -43,6 +43,14 @@ is my filesystem doing and why?", we have:
    `/sys/fs/bcachefs/<uuid>/counters` shows, for every event, the number of
    events since filesystem creation, and since mount.
 
+ - `bcachefs fs top`
+
+   `bcachefs fs top` is the interactive TUI for live filesystem activity. It
+   shows counters, per-device stats, and live filesystem activity from the
+   mounted filesystem. On the counters page, press Enter on a counter to drill
+   into a live tail of the matching tracepoint, scoped to the current mount.
+   Arrow keys, PgUp/PgDn, and End navigate the scrollback and resume following.
+
 ## Hints on where to get started
 
 Is something spinning? Does the system appear to be trying to get work done,
@@ -51,6 +59,9 @@ without getting anything done?
 Check `top`: this shows CPU usage by thread - is something spinning?
 
 Check `perf top`: this shows CPU usage, broken out by function/module - what code is spinning?
+
+Check `bcachefs fs top`: are filesystem counters, device stats, or tracepoint
+tails showing a stuck slowpath?
 
 Check `perf top -e bcachefs:*`: this shows counters for all bcachefs events - are we hitting a rare or slowpath event?
 
@@ -65,9 +76,10 @@ Is something stuck?
 Check sysfs `dev-0/alloc_debug`: this shows various internal allocator state -
 perhaps the allocator is stuck?
 
-Something funny with rebalance/background data tasks?
+Something funny with reconcile/background data tasks?
 
-Check sysfs `internal/rebalance_work`, `internal/moving_ctxts`
+Check `bcachefs fs top`, `bcachefs reconcile status`, and sysfs
+`internal/moving_ctxts`.
 
 All of this stuff could use reorganizing and expanding, of course.
 

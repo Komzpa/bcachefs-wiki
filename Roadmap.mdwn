@@ -87,17 +87,17 @@ and greatly reduce fsync overhead.
 
 ### Online fsck
 
-For supporting huge filesystems, and competing with XFS, we will eventually
-need online fsck.
+For supporting huge filesystems, and competing with XFS, bcachefs needs online
+fsck.
 
 This will be easier in bcachefs than it was in XFS, since our fsck
 implementation is part of the main filesystem codebase and uses the normal
 btree transaction API that's available at runtime.
 
-That means that the current fsck implementation will eventually also be the
-online fsck implementation: the process will mostly be a matter of auditing the
-existing fsck codebase for locking issues, and adding additional locking w.r.t.
-the rest of the filesystem where needed.
+The current fsck implementation is becoming the online fsck implementation:
+some recovery passes can already run online or in the background, while the
+remaining work is auditing fsck code for locking issues and adding the
+additional locking needed around normal filesystem activity.
 
 ## ZNS, SMR device support:
 

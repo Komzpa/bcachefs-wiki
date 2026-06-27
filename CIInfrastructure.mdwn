@@ -9,10 +9,9 @@ pass/fail per subtest on a public dashboard.
 * Public dashboard: <https://evilpiepirate.org/~testdashboard/>
 * Branch summary (commit list with pass/fail counts):
   `https://evilpiepirate.org/~testdashboard/ci?user=<user>&branch=<branch>`
-    * Kent's `bcachefs-testing`:
-      <https://evilpiepirate.org/~testdashboard/ci?user=kmo&branch=bcachefs-testing>
-    * The dashboard root currently lists configured branches but no
-      longer surfaces the per-user views — bookmark the URL above.
+* Kent's `bcachefs-testing`:
+  <https://evilpiepirate.org/~testdashboard/ci?user=kmo&branch=bcachefs-testing>
+* Bookmark branch summary URLs for branches you watch regularly.
 * Per-commit detail: `https://evilpiepirate.org/~testdashboard/c/<sha>/`
 * Per-test log fetcher: `https://evilpiepirate.org/~testdashboard/c/<sha>/<test_group>.<test_name>/log.br`
   (brotli-compressed; pipe through `brotli -d`)
@@ -28,6 +27,27 @@ pass/fail per subtest on a public dashboard.
   scratch-device counts, timeouts, etc.
 * Test definitions live in `tests/fs/bcachefs/*.ktest` in the ktest
   repo.
+
+For local interactive testing, build a root filesystem image once:
+
+    sudo root_image create
+
+Then, from a Linux kernel source tree:
+
+    build-test-kernel run -I ~/ktest/tests/fs/bcachefs/single_device.ktest
+
+While the VM is running, use companion commands from the same kernel tree:
+
+    build-test-kernel ssh
+    build-test-kernel kgdb
+
+For bcachefs-tools test work, individual tests can also be run with:
+
+    btk run -IP ~/ktest/tests/fs/bcachefs/<file>.ktest <test_name>
+
+Test shell functions are normally named `test_*`; drop the `test_` prefix when
+running one test by name. With `-I`, the VM stays running after the test and
+must be stopped before another run.
 
 ### `ci-daemon` — job scheduler
 * Runs on `testdashboard@evilpiepirate.org`.
@@ -57,7 +77,7 @@ pass/fail per subtest on a public dashboard.
 
 ## Configuration
 
-System config lives in `/etc/ktest-ci.toml` on the dashboard host.
+System config lives in `~/ktest-ci.toml` on the dashboard host.
 Key sections:
 
 * `linux_repo` — path to the kernel source tree the daemon fetches
@@ -80,7 +100,7 @@ Local CLI for querying CI results.
   `ci-status` into `~/.cargo/bin`.
 * Modes:
   * Local (`--local`): reads from `output_dir` directly. Default
-    when `~/.ktest/ktest-ci.json5` or `/etc/ktest-ci.toml` is
+    when `~/.ktest/ktest-ci.json5` or `~/ktest-ci.toml` is
     present.
   * Remote (`--remote <url>`): fetches capnp result blobs over
     HTTPS from the dashboard.
@@ -107,12 +127,29 @@ Local CLI for querying CI results.
    summaries and per-test log links.
 5. Developers query results via the web dashboard or `ci-status`.
 
+## Package CI
+
+`bcachefs-tools` also contains `package-ci`, the self-hosted package builder
+for `apt.bcachefs.org`. It runs as `aptbcachefsorg` on evilpiepirate.org and
+publishes Debian/Ubuntu packages via `aptly`.
+
+The package builder is a reconcile loop, not an external CI service:
+
+1. A git push updates the desired commit.
+2. The orchestrator builds the source package.
+3. Binary packages are built across the distro/architecture matrix.
+4. The resulting `.deb` packages are signed and published.
+
+Package targets include Debian unstable/forky/trixie and Ubuntu
+resolute/questing/plucky, with amd64, arm64, and Debian ppc64el coverage where
+supported.
+
 ## Adding a new test
 
 1. Add or modify a `.ktest` file under `tests/fs/bcachefs/` in the
    ktest repo.
 2. Add the file to the appropriate `[test_group.bcachefs]` `tests`
-   list in `/etc/ktest-ci.toml` on the dashboard host.
+   list in `~/ktest-ci.toml` on the dashboard host.
 3. The daemon picks up the change at the next branch fetch cycle.
 
 ## Adding a new worker host

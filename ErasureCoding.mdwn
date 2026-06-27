@@ -2,6 +2,10 @@
 Erasure coding:
 ===============
 
+Erasure coding is implemented and integrated with the background data-movement
+work that repairs degraded data and keeps data placement in line with
+filesystem options.
+
 The term erasure coding refers to the mathematical algorithms for adding
 redundancy to data that allows errors to be corrected: see
 [[https://en.wikipedia.org/wiki/Erasure_code]].

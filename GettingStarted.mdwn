@@ -10,9 +10,20 @@ userspace tools.
 
 **Debian, Ubuntu:**
 
-    curl -fsSL https://apt.bcachefs.org/signing-key.asc | sudo tee /etc/apt/keyrings/bcachefs.asc
-    echo "deb [signed-by=/etc/apt/keyrings/bcachefs.asc] https://apt.bcachefs.org $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/bcachefs.list
-    sudo apt update && sudo apt install bcachefs-tools bcachefs-dkms
+    sudo install -d -m 0755 /etc/apt/keyrings
+    wget -qO- https://apt.bcachefs.org/apt.bcachefs.org.asc | sudo tee /etc/apt/keyrings/apt.bcachefs.org.asc > /dev/null
+    sudo chmod 0644 /etc/apt/keyrings/apt.bcachefs.org.asc
+    # Fingerprint: EA483B991020C72A8A5035ADA0620B5E0E01C1DD
+    sudo tee /etc/apt/sources.list.d/apt.bcachefs.org.sources > /dev/null <<EOF
+    Types: deb deb-src
+    URIs: https://apt.bcachefs.org/unstable/
+    # Or replace unstable with your distro's release name
+    Suites: bcachefs-tools-release
+    Components: main
+    Signed-By: /etc/apt/keyrings/apt.bcachefs.org.asc
+    EOF
+    sudo apt update
+    sudo apt install bcachefs-tools
 
 **Fedora:**
 
@@ -40,6 +51,15 @@ For a tiered setup with sda1 (fast SSD) caching sdb1 (slow HDD):
 
 Writes buffer to the fast device and migrate to the slow device in the
 background. Hot data gets promoted back to the fast device automatically.
+
+For systemd mounts of multi-device filesystems, use `bcachefs wait-devices`
+or the packaged `bcachefs-wait-devices@.service` template so the mount waits
+until all member devices are visible.
+
+The Debian/Ubuntu repository has two suites:
+
+* `bcachefs-tools-release` - latest release
+* `bcachefs-tools-snapshot` - latest `git master` snapshot
 
 ## Next steps
 

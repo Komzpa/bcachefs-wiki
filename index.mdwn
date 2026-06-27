@@ -20,6 +20,7 @@ from a modern filesystem.
 * Reflink
 * Extended attributes, ACLs, quotas
 * Petabyte scalability
+* Up to 255 devices in a filesystem
 * Full online fsck, check and repair (in progress)
 * Robustness and rock solid repair. Damage and breakage are a fact of life,
   it's not a matter of if, but when. It doesn't matter what happened to the
@@ -37,13 +38,9 @@ from a modern filesystem.
 
 ## Distribution packages, installation instructions, DKMS:
 
-As of 6.18, bcachefs is no longer being distributed with the kernel, for
-reasons too complicated to go into here.
-
-(But it might have something to do with QA).
-
-So we're shipping as a DKMS module now. (Like ZFS!). The DKMS package supports
-Linux 6.16 and later.
+As of Linux 6.18, bcachefs is distributed outside the mainline kernel tree.
+The bcachefs.org packages include a DKMS kernel module and userspace tools; the
+DKMS package supports Linux 6.16 and later.
 
 * NixOS, Arch: your distribution bcachefs-tools package has everything you
   need. You're good to go!
@@ -88,17 +85,19 @@ installs configured from a shared common.nix; a `ci-daemon` running on
 the dashboard host generates one job per subtest and feeds them to
 worker slots in newest-commits-first order.
 
-The dashboard root currently lists branches but no longer links into the
-per-user views. To watch what upstream is working on:
+Use the branch summary URL to watch a specific developer branch:
 
 * [Kent's `bcachefs-testing`](https://evilpiepirate.org/~testdashboard/ci?user=kmo&branch=bcachefs-testing) — the integration branch where new work lands first
 
 The URL pattern is `?user=<user>&branch=<branch>` if you want to filter
 other branches the same way.
 
-See [[CIInfrastructure]] for the full architecture (components,
-configuration, workflow, adding tests or worker hosts) and
-[[TestServerSetup]] for the per-host install procedure.
+Debian and Ubuntu packages for `apt.bcachefs.org` are built and published by
+CI.
+
+See [[CIInfrastructure]] for the full testing and package build architecture,
+local ktest commands, configuration, workflow, adding tests or worker hosts,
+and [[TestServerSetup]] for the per-host install procedure.
 
 ## About
 
