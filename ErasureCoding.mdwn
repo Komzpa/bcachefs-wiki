@@ -13,11 +13,11 @@ blocks - no erasure coding algorithm can do better than this. The disadvantage
 of Reed-Solomon is that it always has to read every block within a stripe to fix
 errors - this means that large stripes lead to very slow rebuild times. It might
 be worth investigating other algorithms, like
-[[https://www.usenix.org/legacy/events/fast05/tech/full_papers/hafner_weaver/hafner_weaver.pdf|weaver
-codes]] in the future.
+[[weaver codes|https://www.usenix.org/legacy/events/fast05/tech/full_papers/hafner_weaver/hafner_weaver.pdf]]
+in the future.
 
 
-Limitations of other implementions:
+Limitations of other implementations:
 -----------------------------------
 
 Conventional software raid suffers from the "raid hole": when writing to a
@@ -63,15 +63,15 @@ drop their extra replicas and add a reference to the stripe. Buckets within that
 stripe will never be overwritten until the stripe becomes empty and is released.
 
 This has a number of advantages:
- * No RAID hole
- * Erasure coding doesn't affect data layout - it doesn't cause writes to be
-   fragmented. Data layout is the same as it would be with no replication or
-   erasure coding.
- * Since we never update existing stripes, and stripe creation is done once all
-   the data buckets within the stripe are written, the code is vastly simpler
-   and easier to test than other implementations (e.g. Linux md raid5/6).
+
+* No RAID hole
+* Erasure coding doesn't affect data layout - it doesn't cause writes to be
+  fragmented. Data layout is the same as it would be with no replication or
+  erasure coding.
+* Since we never update existing stripes, and stripe creation is done once all
+  the data buckets within the stripe are written, the code is vastly simpler
+  and easier to test than other implementations (e.g. Linux md raid5/6).
 
 Disadvantages:
- * Nontrivial interactions with the copying garbage collector.
 
-
+* Nontrivial interactions with the copying garbage collector.

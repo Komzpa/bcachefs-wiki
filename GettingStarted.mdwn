@@ -44,5 +44,5 @@ background. Hot data gets promoted back to the fast device automatically.
 ## Next steps
 
 See `bcachefs format --help` for all options, or read the full
-[[User manual|bcachefs-principles-of-operation.pdf]] for detailed documentation
+[[User manual|https://bcachefs.org/bcachefs-principles-of-operation.pdf]] for detailed documentation
 on all features.

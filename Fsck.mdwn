@@ -117,7 +117,7 @@ visible in: so that e.g. the extents pass can correctly count `i_sectors`.
 
 Note that "millions of snapshots" will not _typically_ mean "millions of snaphot
 IDs at the same time" - when we allocate new inodes we pick inode numbers that
-aren't in use in any other snapshot or subvolume, and most files in a filesytem
+aren't in use in any other snapshot or subvolume, and most files in a filesystem
 are created, written to once and then later atomically replaced with a rename
 call. When we're dealing with a file that keys with many different snapshot IDs
 we need to make sure we don't have any hidden O(n^2) algorithms, but if fsck

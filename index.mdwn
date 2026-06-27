@@ -45,19 +45,16 @@ reasons too complicated to go into here.
 So we're shipping as a DKMS module now. (Like ZFS!). The DKMS package supports
 Linux 6.16 and later.
 
-Nixos, Arch: your distribution bcachefs-tools package has everything you need.
-You're good to go!
-
-Debian, Ubuntu: [[https://apt.bcachefs.org/]]
-
-Fedora: [[https://copr.fedorainfracloud.org/coprs/ngompa/bcachefs/builds/]]
-
-OpenSUSE: [[https://build.opensuse.org/package/show/filesystems:bcachefs:release/bcachefs]]
+* NixOS, Arch: your distribution bcachefs-tools package has everything you
+  need. You're good to go!
+* Debian, Ubuntu: [[https://apt.bcachefs.org/]]
+* Fedora: [[https://copr.fedorainfracloud.org/coprs/ngompa/bcachefs/builds/]]
+* OpenSUSE: [[https://build.opensuse.org/package/show/filesystems:bcachefs:release/bcachefs]]
 
 ## Repositories
 
-[[https://evilpiepirate.org/git/bcachefs.git]]  
-[[https://evilpiepirate.org/git/bcachefs-tools.git]]
+* [[https://evilpiepirate.org/git/bcachefs.git]]
+* [[https://evilpiepirate.org/git/bcachefs-tools.git]]
 
 ## Release tarballs
 
@@ -117,7 +114,7 @@ This came out of real world experience with failure modes of block storage that
 conventional filesystems weren't able to protect against: bit corruption, lost
 writes, misdirected writes, and others. COW, coupled with full data and
 metadata checksumming, makes it possible for the filesystem to definitively
-guard againts all of them: a properly implemented COW filesystem should never
+guard against all of them: a properly implemented COW filesystem should never
 return incorrect data.
 
 The push towards copy on write goes back even further in academic research. It
@@ -178,7 +175,7 @@ Historically, the primary disadvantages of this approach has been:
   relational database, with tables corresponding to data types, and simple
   unified transactional interface.
 
-These have been the achille's heels, and the reason why other more modern COW
+These have been the Achilles' heels, and the reason why other more modern COW
 filesystems have not lived up to ZFS's robustness.
 
 ### History of bcachefs, and how these were solved
@@ -284,13 +281,13 @@ We're also now offering contracts for support and feature development -
 Join us in the bcache [[IRC|Irc]] channel, we have a small group of bcachefs
 users and testers there: #bcache on OFTC (irc.oftc.net).
 
-Mailing list: [[https://lore.kernel.org/linux-bcachefs/]], or
-linux-bcachefs@vger.kernel.org.
-
-Bug trackers: [[bcachefs|https://github.com/koverstreet/bcachefs/issues]],
-[[bcachefs-tools|https://github.com/koverstreet/bcachefs-tools/issues]]
+* Mailing list: [[https://lore.kernel.org/linux-bcachefs/]], or
+  linux-bcachefs@vger.kernel.org.
+* Bug trackers: [[bcachefs|https://github.com/koverstreet/bcachefs/issues]],
+  [[bcachefs-tools|https://github.com/koverstreet/bcachefs-tools/issues]]
 
 ## News
 
-Blog: [[!inline pages="news/*"]]
-Archive: [[Archive|News-full.mdwn]]
+[[!inline pages="news/*"]]
+
+Archive: [[Archive|News-full]]

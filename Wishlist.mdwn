@@ -13,7 +13,7 @@
    object-capability systems, such as [Robigalia][robigalia]).
  * An API like the above, but supporting multiple streams per blob, possibly
    with string identifiers (needs further examination, intent is to match the
-   [needs of CephFS for OSD backends][cephback]).
+   needs of CephFS for OSD backends).
  * More advanced caching algorithms; one potentially-relevant paper is
    [Pannier: A Container-based Flash Cache for Compound Objects][pannier].
  * "Asymmetrical" compression algorithms, that support only decompression (XZ
@@ -81,7 +81,6 @@
 [AESSIV]: https://tools.ietf.org/html/rfc5297
 [secdel]: https://lwn.net/Articles/462437/
 [robigalia]: https://robigalia.org
-[cephback]: http://bryanapperson.com/blog/ceph-osd-performance/
 [pannier]: https://pdfs.semanticscholar.org/fa5f/3aa6de62e126e6fe2986c70a34e4d678860b.pdf
 [triple-parity]: https://www.mail-archive.com/linux-btrfs@vger.kernel.org/msg28964.html
 [RFC6330]: https://tools.ietf.org/html/rfc6330

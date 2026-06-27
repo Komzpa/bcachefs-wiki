@@ -18,15 +18,15 @@ previous version.
 Early in the process of implementing the tiering feature we ran into an
 interesting problem.  Members within the superblock were not large enough to
 properly store this data. While we could have just resized the member, this
-would have caused further issues regarding compatability. Instead we opted to
+would have caused further issues regarding compatibility. Instead we opted to
 implement resizable members, members v2 if you will. The effect of adding
 resizable members allows us to add new fields to the members while still
-ensuring backwards compatability.
+ensuring backwards compatibility.
 
 ## Members v2
 The superblock of a filesystem is the start of that filesystem and requires
 extensible fields which contain important data such as a list of member
-devices. A suberblock needs extensible fields in cases such as a new device
+devices. A superblock needs extensible fields in cases such as a new device
 being added to the filesystem, in which case the members field needs to be
 extended. 
 
@@ -47,7 +47,7 @@ require some idea of device performance which needs to be stored in the
 superblock.
 
 ## Storing device performance
-The devices within the filesytem will now store IOPS measurements for randread, 
+The devices within the filesystem will now store IOPS measurements for randread,
 randwrite, seq-read, and seq-write. In the future the new IOPS field can also be 
 useful in other features such as monitoring device health. 
 

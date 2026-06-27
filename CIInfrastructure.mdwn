@@ -31,7 +31,7 @@ pass/fail per subtest on a public dashboard.
 
 ### `ci-daemon` — job scheduler
 * Runs on `testdashboard@evilpiepirate.org`.
-* Push-mode: builds a [jobkit](https://github.com/koverstreet/jobkit)
+* Push-mode: builds a [jobkit](https://evilpiepirate.org/git/jobkit.git/)
   Choir with one executor per worker-host slot, keeps a bounded
   window (~2000) of jobs submitted at a time, refills as the window
   drains.

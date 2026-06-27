@@ -1,7 +1,7 @@
 ### Other useful links
 * [[Roadmap]]
 * [[Wishlist]]
-* [[User manual|bcachefs-principles-of-operation.pdf]]
+* [[User manual|https://bcachefs.org/bcachefs-principles-of-operation.pdf]]
 
 ### Developer documentation
 * [[BtreeIterators]]
@@ -14,4 +14,4 @@
 * [[CIInfrastructure]]
 * [[TestServerSetup]]
 * [[StablePages]]
-* [[October 2022 talk for Redhat|bcachefs_talk_2022_10.mpv]]
+* [[October 2022 talk for Redhat|https://bcachefs.org/bcachefs_talk_2022_10.mpv]]
