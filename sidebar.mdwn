@@ -1,7 +1,12 @@
-### Other useful links
+### For users
+* [[Getting Started|GettingStarted]]
+* [[FAQ]]
+* [[User manual|https://bcachefs.org/bcachefs-principles-of-operation.pdf]]
+* [[IRC and support|Irc]]
+
+### Project
 * [[Roadmap]]
 * [[Wishlist]]
-* [[User manual|https://bcachefs.org/bcachefs-principles-of-operation.pdf]]
 
 ### Developer documentation
 * [[BtreeIterators]]
