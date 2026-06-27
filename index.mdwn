@@ -53,8 +53,12 @@ Linux 6.16 and later.
 
 ## Repositories
 
-* [[https://evilpiepirate.org/git/bcachefs.git]]
-* [[https://evilpiepirate.org/git/bcachefs-tools.git]]
+* bcachefs kernel code: [[evilpiepirate|https://evilpiepirate.org/git/bcachefs.git]],
+  [[GitHub|https://github.com/koverstreet/bcachefs]]
+* bcachefs-tools and DKMS module: [[evilpiepirate|https://evilpiepirate.org/git/bcachefs-tools.git]],
+  [[GitHub|https://github.com/koverstreet/bcachefs-tools]]
+* ktest kernel test harness: [[evilpiepirate|https://evilpiepirate.org/git/ktest.git]],
+  [[GitHub|https://github.com/koverstreet/ktest]]
 
 ## Release tarballs
 
@@ -279,7 +283,8 @@ We're also now offering contracts for support and feature development -
 [[roadmap|Roadmap]] for ideas on things you might like to support.
 
 Join us in the bcache [[IRC|Irc]] channel, we have a small group of bcachefs
-users and testers there: #bcache on OFTC (irc.oftc.net).
+users and testers there: #bcache on OFTC (irc.oftc.net). You can also
+[[join #bcache in a web browser|https://webchat.oftc.net/?randomnick=1&channels=bcache&prompt=1]].
 
 * Mailing list: [[https://lore.kernel.org/linux-bcachefs/]], or
   linux-bcachefs@vger.kernel.org.

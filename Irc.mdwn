@@ -2,6 +2,9 @@
 
 `#bcache` on `irc.oftc.net`.
 
+Join in a web browser:
+<https://webchat.oftc.net/?randomnick=1&channels=bcache&prompt=1>
+
 <iframe src="https://webchat.oftc.net/?randomnick=1&channels=bcache&prompt=1" width="647" height="400"></iframe>
 
 ## Joining from Matrix
