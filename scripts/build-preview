@@ -1,0 +1,112 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+	cat <<'EOF'
+Usage: scripts/build-preview [--out DIR] [--serve] [--port PORT]
+
+Build a local IkiWiki preview that matches the live bcachefs.org setup more
+closely than plain `ikiwiki . OUT`.
+
+Options:
+  --out DIR    Output directory. Defaults to
+               ${TMPDIR:-/tmp}/bcachefs-wiki-site.
+  --serve      Serve the built site on 127.0.0.1.
+  --port PORT  Port for --serve. Default: 8777.
+  -h, --help   Show this help.
+EOF
+}
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+out="${BCACHEFS_WIKI_OUT:-${TMPDIR:-/tmp}/bcachefs-wiki-site}"
+serve=0
+port=8777
+
+while (($#)); do
+	case "$1" in
+		--out)
+			[[ $# -ge 2 ]] || { echo "--out needs a directory" >&2; exit 2; }
+			out="$2"
+			shift 2
+			;;
+		--serve)
+			serve=1
+			shift
+			;;
+		--port)
+			[[ $# -ge 2 ]] || { echo "--port needs a value" >&2; exit 2; }
+			port="$2"
+			shift 2
+			;;
+		-h|--help)
+			usage
+			exit 0
+			;;
+		*)
+			echo "Unknown argument: $1" >&2
+			usage >&2
+			exit 2
+			;;
+	esac
+done
+
+if ! command -v ikiwiki >/dev/null 2>&1; then
+	echo "ikiwiki is not installed. On Debian/Ubuntu: sudo apt-get install ikiwiki" >&2
+	exit 1
+fi
+
+if [[ "$serve" -eq 1 ]] && ! command -v python3 >/dev/null 2>&1; then
+	echo "python3 is required for --serve" >&2
+	exit 1
+fi
+
+out_parent="$(dirname "$out")"
+mkdir -p "$out_parent"
+out_abs="$(cd "$out_parent" && pwd)/$(basename "$out")"
+home_abs="$(cd "$HOME" && pwd)"
+
+case "$out_abs" in
+	/|"$home_abs"|"$repo_root"|"$repo_root"/*)
+		echo "Refusing unsafe output directory: $out_abs" >&2
+		exit 2
+		;;
+esac
+
+out="$out_abs"
+
+setup_file="$(mktemp "${TMPDIR:-/tmp}/bcachefs-wiki-setup.XXXXXX")"
+trap 'rm -f "$setup_file"' EXIT
+
+cat >"$setup_file" <<EOF
+#!/usr/bin/perl
+use IkiWiki::Setup::Standard {
+	wikiname => "bcachefs",
+	srcdir => "$repo_root",
+	destdir => "$out",
+	url => "https://bcachefs.org/",
+	rcs => "git",
+	add_plugins => [qw{sidebar recentchanges inline meta htmlscrubber goodstuff}],
+	rss => 1,
+	atom => 1,
+	html5 => 0,
+	responsive_layout => 1,
+}
+EOF
+
+rm -rf "$out" "$repo_root/.ikiwiki"
+mkdir -p "$out"
+
+ikiwiki --setup "$setup_file" --rebuild
+
+cat <<EOF
+
+Built bcachefs wiki preview:
+  $out
+
+EOF
+
+if [[ "$serve" -eq 1 ]]; then
+	echo "Serving http://127.0.0.1:$port/"
+	exec python3 -m http.server "$port" --bind 127.0.0.1 --directory "$out"
+fi
