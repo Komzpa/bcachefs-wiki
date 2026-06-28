@@ -259,6 +259,28 @@ the current size, and the current compression function - offset + current size
 uniquely determines the uncompressed data, so, offset + current size +
 compression function will uniquely determine the compressed output.
 
+#### External snapshots and cloned devices
+
+The nonce uniqueness described above is scoped to one filesystem instance. If an
+encrypted bcachefs device is copied or snapshotted below bcachefs, and both the
+original and the copy are later mounted read-write, the two filesystems still
+share the same master key and can derive the same nonces for later writes to the
+same logical locations. With ChaCha20, reusing a key/nonce pair for different
+plaintexts breaks semantic security: someone who knows the plaintext written to
+one clone can recover the corresponding plaintext written to the other clone by
+XORing the two ciphertexts with the known plaintext.
+
+Bcachefs's own snapshots do not have this problem; they use copy-on-write
+semantics inside the same filesystem, and new writes allocate new version
+numbers and therefore new nonces.
+
+Do not mount an external snapshot, cloned block device, VM image copy, reflinked
+loop backing file, or storage-array copy of an encrypted bcachefs filesystem
+read-write while the original may also be written. Keep external copies
+read-only, for example with `-o nochanges`, or put a separate encryption layer
+such as LUKS between the snapshot layer and bcachefs so the clones do not share
+the same bcachefs master key/nonce space.
+
 #### Nonce reuse on startup
 
 After recovery, we must ensure we don't reuse existing version numbers - we must
