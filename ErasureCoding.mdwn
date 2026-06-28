@@ -20,6 +20,31 @@ be worth investigating other algorithms, like
 [[weaver codes|https://www.usenix.org/legacy/events/fast05/tech/full_papers/hafner_weaver/hafner_weaver.pdf]]
 in the future.
 
+Parameters:
+-----------
+
+Erasure coding is controlled by two filesystem options:
+
+* `erasure_code=1` enables erasure coding for data writes.
+* `data_replicas` controls the number of redundant blocks in each stripe:
+  `m = data_replicas - 1`.
+
+This means `data_replicas=2` gives one parity block, similar to RAID5, and
+`data_replicas=3` gives two parity blocks, similar to RAID6. Current bcachefs
+code only supports up to RAID6, so larger `data_replicas` values are clamped to
+3 while erasure coding is enabled.
+
+The number of data blocks in a stripe is `k`. Bcachefs normally chooses `k`
+from the active devices available for the target, after reserving the parity
+blocks. The `ec_max_data_blocks` option caps `k`; the default value, 0, means no
+cap and allows using all active devices that are available for the stripe.
+
+The rough usable-capacity ratio for erasure-coded user data is therefore
+`k / (k + m)`, before metadata, reserves, compression, fragmentation, and
+copying-garbage-collector effects. Larger `k` improves that ratio, but it also
+widens stripes: repairing or reconstructing Reed-Solomon data may need to read
+every other block in the stripe.
+
 
 Limitations of other implementations:
 -----------------------------------
